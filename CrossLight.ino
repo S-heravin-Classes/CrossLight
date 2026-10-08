@@ -7,11 +7,6 @@ void setup() {
   pinMode(6,OUTPUT); //SG
   pinMode(7,OUTPUT); //WR
   pinMode(8,OUTPUT); //WG
-
-}
-
-void loop() {
-  //State I N&s Green
   digitalWrite(1,LOW);
   digitalWrite(2,HIGH);
   digitalWrite(3,HIGH);
@@ -20,18 +15,20 @@ void loop() {
   digitalWrite(6,HIGH);
   digitalWrite(7,HIGH);
   digitalWrite(8,LOW);
-  //Wait 30s
+}
+
+void loop() {
+    //Wait 30s
   delay(30000);
-  //State II W&E Green
-  digitalWrite(1,HIGH);
-  digitalWrite(2,LOW);
-  digitalWrite(3,LOW);
-  digitalWrite(4,LOW);
-  digitalWrite(5,HIGH);
-  digitalWrite(6,LOW);
-  digitalWrite(7,LOW);
-  digitalWrite(8,HIGH);
-  //Wait 30s
-  delay(30000);
+  //State Change
+  digitalWrite(1,!digitalRead(1));
+  digitalWrite(2,!digitalRead(2));
+  digitalWrite(3,!digitalRead(3));
+  digitalWrite(4,!digitalRead(4));
+  digitalWrite(5,!digitalRead(5));
+  digitalWrite(6,!digitalRead(6));
+  digitalWrite(7,!digitalRead(7));
+  digitalWrite(8,!digitalRead(8));
+
   
 }
