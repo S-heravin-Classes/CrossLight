@@ -11,7 +11,7 @@ void setup() {
 }
 
 void loop() {
-  //State I
+  //State I N&s Green
   digitalWrite(1,LOW);
   digitalWrite(2,HIGH);
   digitalWrite(3,HIGH);
@@ -22,7 +22,7 @@ void loop() {
   digitalWrite(8,LOW);
   //Wait 30s
   delay(30000);
-  //State II
+  //State II W&E Green
   digitalWrite(1,HIGH);
   digitalWrite(2,LOW);
   digitalWrite(3,LOW);
