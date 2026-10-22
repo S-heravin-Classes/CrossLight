@@ -11,23 +11,38 @@ int IV=12;
 int Auto4=13;
 int Auto2=0;
 int i,j,Police;
-int wait=30000;
+int wait=3000;
+bool debug=1;
 void setup() {
+  Serial.begin(115200);
+  Serial.print("Booting UP");
+  
   //Set Mode to OUTPUT for 1 to 8
   for (i=1;i<=8;i++){
     pinMode(i,OUTPUT);
+    Serial.print(".");
   }
   for(i=9;i<=13;i++){
     pinMode(i,INPUT_PULLUP);
+    Serial.print(".");
   }
   pinMode(0,INPUT_PULLUP);
+  Serial.println(".");
 }
 
 void loop() {
 // Write To OutPut
+    //if(debug) Serial.print("J=");
+    if(debug) Serial.print(j);
     for(i=0;i<8;i++){
       digitalWrite(i+1,state[j][i]);
+      if(debug) Serial.print(",");
+      if(debug) Serial.print(state[j][i]);
+      
+      
     }
+    if(debug) Serial.print(",");
+    if(debug) Serial.println(Police);
     // Read Police Key State 
     if(!digitalRead(Auto4)) Police=5;
     else if(!digitalRead(Auto2)) Police=6;
@@ -41,6 +56,7 @@ void loop() {
       case 1:
       // State I 
        j=0;
+       break;
       case 2:
       // State II
        j=1;
