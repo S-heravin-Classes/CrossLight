@@ -1,9 +1,15 @@
-bool state[4][8]={{1,0,0,1,0,1,0,1},{0,1,1,0,0,1,0,1},{0,1,0,1,1,0,0,1},{0,1,0,1,0,1,1,0}};
+bool state[6][8]={{1,0,0,1,0,1,0,1},
+                  {0,1,1,0,0,1,0,1},
+                  {0,1,0,1,1,0,0,1},
+                  {0,1,0,1,0,1,1,0},
+                  {1,0,0,1,1,0,0,1},
+                  {0,1,1,0,0,1,1,0}};
 int I=9;
 int II=10;
 int III=11;
 int IV=12;
 int Auto4=13;
+int Auto2=0;
 int i,j,Police;
 int wait=30000;
 void setup() {
@@ -11,6 +17,10 @@ void setup() {
   for (i=1;i<=8;i++){
     pinMode(i,OUTPUT);
   }
+  for(i=9;i<=13;i++){
+    pinMode(i,INPUT_PULLUP);
+  }
+  pinMode(0,INPUT_PULLUP);
 }
 
 void loop() {
@@ -20,6 +30,7 @@ void loop() {
     }
     // Read Police Key State 
     if(!digitalRead(Auto4)) Police=5;
+    else if(!digitalRead(Auto2)) Police=6;
     else if(!digitalRead(I)) Police=1;
     else if(!digitalRead(II)) Police=2;
     else if(!digitalRead(III)) Police=3;
@@ -47,6 +58,12 @@ void loop() {
        if(j<3) j++;
        else j=0;
        delay(wait);
+       break;
+       case 6:
+       // State Auto2
+        if(j==4)j=5;
+        else j=4;
+        delay(wait);
        break;
     }
 
