@@ -12,6 +12,8 @@ int Auto4=13;
 int Auto2=0;
 int i,j,Police;
 long wait=3000;
+// Previous Millis
+long PVM=0;
 int AnalogVal;
 bool debug=1;
 void setup() {
@@ -77,15 +79,19 @@ void loop() {
        break;
        case 5:
        // State Auto4
-       if(j<3) j++;
-       else j=0;
-       delay(wait);
+       if((millis()-PVM)>=wait){
+          if(j<3) j++;
+          else j=0;
+          PVM=millis();
+       }
        break;
        case 6:
        // State Auto2
-        if(j==4)j=5;
-        else j=4;
-        delay(wait);
+       if((millis()-PVM)>=wait){
+          if(j==4)j=5;
+          else j=4;
+          PVM=millis();
+       }
        break;
     }
 
