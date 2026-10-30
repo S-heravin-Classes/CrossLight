@@ -11,7 +11,8 @@ int IV=12;
 int Auto4=13;
 int Auto2=0;
 int i,j,Police;
-int wait=3000;
+long wait=3000;
+int AnalogVal;
 bool debug=1;
 void setup() {
   Serial.begin(115200);
@@ -38,11 +39,16 @@ void loop() {
       digitalWrite(i+1,state[j][i]);
       if(debug) Serial.print(",");
       if(debug) Serial.print(state[j][i]);
-      
-      
     }
     if(debug) Serial.print(",");
-    if(debug) Serial.println(Police);
+    if(debug) Serial.print(Police);
+    //Read Analog value
+    AnalogVal=analogRead(A0);
+    wait=map(AnalogVal,0,1023,10000,300000);
+    if(debug) Serial.print(",");
+    if(debug) Serial.print(AnalogVal);
+    if(debug) Serial.print(",");
+    if(debug) Serial.println(wait);
     // Read Police Key State 
     if(!digitalRead(Auto4)) Police=5;
     else if(!digitalRead(Auto2)) Police=6;
