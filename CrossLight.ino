@@ -11,7 +11,8 @@ int IV=12;
 int Auto4=13;
 int Auto2=0;
 int i,j,Police;
-long wait=3000;
+int potPin[4]={A0,A1,A2,A3};
+unsigned long wait=3000;
 // Previous Millis
 long PVM=0;
 int AnalogVal;
@@ -44,13 +45,6 @@ void loop() {
     }
     if(debug) Serial.print(",");
     if(debug) Serial.print(Police);
-    //Read Analog value
-    AnalogVal=analogRead(A0);
-    wait=map(AnalogVal,0,1023,10000,300000);
-    if(debug) Serial.print(",");
-    if(debug) Serial.print(AnalogVal);
-    if(debug) Serial.print(",");
-    if(debug) Serial.println(wait);
     // Read Police Key State 
     if(!digitalRead(Auto4)) Police=5;
     else if(!digitalRead(Auto2)) Police=6;
@@ -79,19 +73,33 @@ void loop() {
        break;
        case 5:
        // State Auto4
-       if((millis()-PVM)>=wait){
+        if(j>3) j=0;
+       //Read Analog value
+        wait=map(analogRead(potPin[j]),0,1023,10000,300000);
+        if(debug) Serial.print(",");
+        if(debug) Serial.print(AnalogVal);
+        if(debug) Serial.print(",");
+        if(debug) Serial.println(wait);
+        if((millis()-PVM)>=wait){
           if(j<3) j++;
           else j=0;
           PVM=millis();
-       }
+        }
        break;
        case 6:
        // State Auto2
-       if((millis()-PVM)>=wait){
+       if(j<4) j=4;
+       //Read Analog value
+        wait=map(analogRead(potPin[j-4]),0,1023,10000,300000);
+        if(debug) Serial.print(",");
+        if(debug) Serial.print(AnalogVal);
+        if(debug) Serial.print(",");
+        if(debug) Serial.println(wait);
+        if((millis()-PVM)>=wait){
           if(j==4)j=5;
           else j=4;
           PVM=millis();
-       }
+        }
        break;
     }
 
