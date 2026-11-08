@@ -11,7 +11,10 @@ int IV=12;
 int Auto4=13;
 int Auto2=0;
 int i,j,Police;
-long wait=3000;
+//Potentiometer Pin
+int potPin[4]={A0,A1,A2,A3};
+//Wait Times
+unsigned long waits[4];
 // Previous Millis
 long PVM=0;
 int AnalogVal;
@@ -42,15 +45,18 @@ void loop() {
       if(debug) Serial.print(",");
       if(debug) Serial.print(state[j][i]);
     }
+
+    //Read Analog values and Write in to waits Array
+    for(i=0;i<4;i++){
+      AnalogVal=analogRead(potPin[i]);
+      waits[i]=map(AnalogVal,0,1023,10000,300000);
+      if(debug) Serial.print(",");
+      if(debug) Serial.print(AnalogVal);
+      if(debug) Serial.print(",");
+      if(debug) Serial.print(waits[i]);
+    }
     if(debug) Serial.print(",");
-    if(debug) Serial.print(Police);
-    //Read Analog value
-    AnalogVal=analogRead(A0);
-    wait=map(AnalogVal,0,1023,10000,300000);
-    if(debug) Serial.print(",");
-    if(debug) Serial.print(AnalogVal);
-    if(debug) Serial.print(",");
-    if(debug) Serial.println(wait);
+    if(debug) Serial.println(Police);
     // Read Police Key State 
     if(!digitalRead(Auto4)) Police=5;
     else if(!digitalRead(Auto2)) Police=6;
@@ -79,7 +85,9 @@ void loop() {
        break;
        case 5:
        // State Auto4
-       if((millis()-PVM)>=wait){
+       // j Guardline 0<j<4
+       if(j>=4) j=0;
+       if((millis()-PVM)>=waits[j]){
           if(j<3) j++;
           else j=0;
           PVM=millis();
@@ -87,7 +95,9 @@ void loop() {
        break;
        case 6:
        // State Auto2
-       if((millis()-PVM)>=wait){
+       // j Guardline 4<=j
+       if(j<4) j=4;
+       if((millis()-PVM)>=waits[j-4]){
           if(j==4)j=5;
           else j=4;
           PVM=millis();
