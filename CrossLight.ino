@@ -1,9 +1,3 @@
-int I=9;
-int II=10;
-int III=11;
-int IV=12;
-int Auto4=13;
-int Auto2=0;
 int i;
 int potPin[4]={A0,A1,A2,A3};
 unsigned long wait=3000;
@@ -38,12 +32,7 @@ void loop() {
     if(debug) Serial.print(",");
     if(debug) Serial.print(Police);
     // Read Police Key State 
-    if(!digitalRead(Auto4)) Police=5;
-    else if(!digitalRead(Auto2)) Police=6;
-    else if(!digitalRead(I)) Police=1;
-    else if(!digitalRead(II)) Police=2;
-    else if(!digitalRead(III)) Police=3;
-    else if(!digitalRead(IV)) Police=4;
+    Police=policeStatusRead();
 
     //Select Allow Way with Police Key State
     switch (Police){
@@ -116,4 +105,20 @@ void setLight(int CrosState) {
     if(debug) Serial.print(",");
     if(debug) Serial.print(state[CrosState][i]);
   }
+}
+int policeStatusRead() {
+  int I=9;
+  int II=10;
+  int III=11;
+  int IV=12;
+  int Auto4=13;
+  int Auto2=0;
+  int Police;
+  if(!digitalRead(Auto4)) Police=5;
+    else if(!digitalRead(Auto2)) Police=6;
+    else if(!digitalRead(I)) Police=1;
+    else if(!digitalRead(II)) Police=2;
+    else if(!digitalRead(III)) Police=3;
+    else if(!digitalRead(IV)) Police=4;
+  return Police;
 }
