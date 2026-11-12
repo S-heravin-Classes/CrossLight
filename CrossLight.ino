@@ -10,7 +10,7 @@ int III=11;
 int IV=12;
 int Auto4=13;
 int Auto2=0;
-int i,j,Police;
+int i;
 int potPin[4]={A0,A1,A2,A3};
 unsigned long wait=3000;
 // Previous Millis
@@ -35,14 +35,12 @@ void setup() {
 }
 
 void loop() {
+  int j,Police;
 // Write To OutPut
     //if(debug) Serial.print("J=");
     if(debug) Serial.print(j);
-    for(i=0;i<8;i++){
-      digitalWrite(i+1,state[j][i]);
-      if(debug) Serial.print(",");
-      if(debug) Serial.print(state[j][i]);
-    }
+    
+
     if(debug) Serial.print(",");
     if(debug) Serial.print(Police);
     // Read Police Key State 
@@ -58,18 +56,22 @@ void loop() {
       case 1:
       // State I 
        j=0;
+       setLight(j);
        break;
       case 2:
       // State II
        j=1;
+       setLight(j);
        break;
        case 3:
        // State III
        j=2;
+       setLight(j);
        break;
        case 4:
        // State IV
        j=3;
+       setLight(j);
        break;
        case 5:
        // State Auto4
@@ -84,6 +86,7 @@ void loop() {
           if(j<3) j++;
           else j=0;
           PVM=millis();
+          setLight(j);
         }
        break;
        case 6:
@@ -99,9 +102,17 @@ void loop() {
           if(j==4)j=5;
           else j=4;
           PVM=millis();
+          setLight(j);
         }
        break;
     }
 
   
+}
+void setLight(int CrosState) {
+  for(i=0;i<8;i++){
+    digitalWrite(i+1,state[CrosState][i]);
+    if(debug) Serial.print(",");
+    if(debug) Serial.print(state[CrosState][i]);
+  }
 }
