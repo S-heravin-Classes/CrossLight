@@ -1,9 +1,3 @@
-bool state[6][8]={{1,0,0,1,0,1,0,1},
-                  {0,1,1,0,0,1,0,1},
-                  {0,1,0,1,1,0,0,1},
-                  {0,1,0,1,0,1,1,0},
-                  {1,0,0,1,1,0,0,1},
-                  {0,1,1,0,0,1,1,0}};
 int I=9;
 int II=10;
 int III=11;
@@ -110,8 +104,15 @@ void loop() {
   
 }
 void setLight(int CrosState) {
+  bool state[6][8]={{1,0,0,1,0,1,0,1},
+                  {0,1,1,0,0,1,0,1},
+                  {0,1,0,1,1,0,0,1},
+                  {0,1,0,1,0,1,1,0},
+                  {1,0,0,1,1,0,0,1},
+                  {0,1,1,0,0,1,1,0}};
+  int pinMap[]={A5,2,3,4,5,6,7,8};
   for(i=0;i<8;i++){
-    digitalWrite(i+1,state[CrosState][i]);
+    digitalWrite(pinMap[i],state[CrosState][i]);
     if(debug) Serial.print(",");
     if(debug) Serial.print(state[CrosState][i]);
   }
