@@ -58,7 +58,7 @@ void loop() {
        break;
        case 5:
        // State Auto4
-        if(j>3) j=0;
+        if(j>4) j=0;
        //Read Analog value
         wait=map(analogRead(potPin[j]),0,1023,10000,300000);
         if(debug) Serial.print(",");
