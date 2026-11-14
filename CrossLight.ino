@@ -1,20 +1,6 @@
-bool state[6][8]={{1,0,0,1,0,1,0,1},
-                  {0,1,1,0,0,1,0,1},
-                  {0,1,0,1,1,0,0,1},
-                  {0,1,0,1,0,1,1,0},
-                  {1,0,0,1,1,0,0,1},
-                  {0,1,1,0,0,1,1,0}};
-int I=9;
-int II=10;
-int III=11;
-int IV=12;
-int Auto4=13;
-int Auto2=0;
-int i,j,Police;
-//Potentiometer Pin
+int i;
 int potPin[4]={A0,A1,A2,A3};
-//Wait Times
-unsigned long waits[4];
+unsigned long wait=3000;
 // Previous Millis
 long PVM=0;
 int AnalogVal;
@@ -37,73 +23,102 @@ void setup() {
 }
 
 void loop() {
+  int j,Police;
 // Write To OutPut
     //if(debug) Serial.print("J=");
     if(debug) Serial.print(j);
-    for(i=0;i<8;i++){
-      digitalWrite(i+1,state[j][i]);
-      if(debug) Serial.print(",");
-      if(debug) Serial.print(state[j][i]);
-    }
+    
 
-    //Read Analog values and Write in to waits Array
-    for(i=0;i<4;i++){
-      AnalogVal=analogRead(potPin[i]);
-      waits[i]=map(AnalogVal,0,1023,10000,300000);
-      if(debug) Serial.print(",");
-      if(debug) Serial.print(AnalogVal);
-      if(debug) Serial.print(",");
-      if(debug) Serial.print(waits[i]);
-    }
     if(debug) Serial.print(",");
-    if(debug) Serial.println(Police);
+    if(debug) Serial.print(Police);
     // Read Police Key State 
-    if(!digitalRead(Auto4)) Police=5;
-    else if(!digitalRead(Auto2)) Police=6;
-    else if(!digitalRead(I)) Police=1;
-    else if(!digitalRead(II)) Police=2;
-    else if(!digitalRead(III)) Police=3;
-    else if(!digitalRead(IV)) Police=4;
+    Police=policeStatusRead();
 
     //Select Allow Way with Police Key State
     switch (Police){
       case 1:
       // State I 
        j=0;
+       setLight(j);
        break;
       case 2:
       // State II
        j=1;
+       setLight(j);
        break;
        case 3:
        // State III
        j=2;
+       setLight(j);
        break;
        case 4:
        // State IV
        j=3;
+       setLight(j);
        break;
        case 5:
        // State Auto4
-       // j Guardline 0<j<4
-       if(j>=4) j=0;
-       if((millis()-PVM)>=waits[j]){
+        if(j>4) j=0;
+       //Read Analog value
+        wait=map(analogRead(potPin[j]),0,1023,10000,300000);
+        if(debug) Serial.print(",");
+        if(debug) Serial.print(AnalogVal);
+        if(debug) Serial.print(",");
+        if(debug) Serial.println(wait);
+        if((millis()-PVM)>=wait){
           if(j<3) j++;
           else j=0;
           PVM=millis();
-       }
+          setLight(j);
+        }
        break;
        case 6:
        // State Auto2
-       // j Guardline 4<=j
        if(j<4) j=4;
-       if((millis()-PVM)>=waits[j-4]){
+       //Read Analog value
+        wait=map(analogRead(potPin[j-4]),0,1023,10000,300000);
+        if(debug) Serial.print(",");
+        if(debug) Serial.print(AnalogVal);
+        if(debug) Serial.print(",");
+        if(debug) Serial.println(wait);
+        if((millis()-PVM)>=wait){
           if(j==4)j=5;
           else j=4;
           PVM=millis();
-       }
+          setLight(j);
+        }
        break;
     }
 
   
+}
+void setLight(int CrosState) {
+  bool state[6][8]={{1,0,0,1,0,1,0,1},
+                  {0,1,1,0,0,1,0,1},
+                  {0,1,0,1,1,0,0,1},
+                  {0,1,0,1,0,1,1,0},
+                  {1,0,0,1,1,0,0,1},
+                  {0,1,1,0,0,1,1,0}};
+  int pinMap[]={A5,2,3,4,5,6,7,8};
+  for(i=0;i<8;i++){
+    digitalWrite(pinMap[i],state[CrosState][i]);
+    if(debug) Serial.print(",");
+    if(debug) Serial.print(state[CrosState][i]);
+  }
+}
+int policeStatusRead() {
+  int I=9;
+  int II=10;
+  int III=11;
+  int IV=12;
+  int Auto4=13;
+  int Auto2=0;
+  int Police;
+  if(!digitalRead(Auto4)) Police=5;
+    else if(!digitalRead(Auto2)) Police=6;
+    else if(!digitalRead(I)) Police=1;
+    else if(!digitalRead(II)) Police=2;
+    else if(!digitalRead(III)) Police=3;
+    else if(!digitalRead(IV)) Police=4;
+  return Police;
 }
